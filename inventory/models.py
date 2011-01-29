@@ -7,8 +7,14 @@ class Food(models.Model):
     current_amount = models.FloatField()
     vegetarian = models.BooleanField(default=True)
     staple = models.BooleanField(default=False)
-    measurement_unit = models.ForeignKey('MeasurmentUnit')
+    measurement_unit = models.ForeignKey('MeasurementUnit')
     categories = models.ManyToManyField('Category')
+
+    class Meta(object):
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
 
 class Purchase(models.Model):
     food = models.ForeignKey('Food')
@@ -22,13 +28,38 @@ class Purchase(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=100)
-    parent = models.ForeignKey('self')
+    parent = models.ForeignKey('self', null=True, related_name='categories', blank=True)
+
+    class Meta(object):
+        verbose_name_plural = 'Categories'
+        ordering = ('category',)
+
+    def __str__(self):
+        return self.category
 
 class MeasurementUnit(models.Model):
     measurement_unit = models.CharField(max_length=45)
 
+    class Meta(object):
+        ordering = ('measurement_unit',)
+
+    def __str__(self):
+        return self.measurement_unit
+
 class Store(models.Model):
     store = models.CharField(max_length=45)
 
+    class Meta(object):
+        ordering = ('store',)
+
+    def __str__(self):
+        return self.store
+
 class Brand(models.Model):
     brand = models.CharField(max_length=100)
+
+    class Meta(object):
+        ordering = ('brand',)
+
+    def __str__(self):
+        return self.brand
